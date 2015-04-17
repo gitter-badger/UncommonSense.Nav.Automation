@@ -14,8 +14,6 @@ Exports NAV objects from the selected NAV development environment instance. Can 
 
 ##Examples
 ```powershell
-Get-NAVDevelopmentClients | Get-NAVApplicationObjectInfo -Verbose | Format-Table
-    
 $ModifiedObjects = Get-NavApplicationObjectInfo `
     -DatabaseServerType SQL `
     -DatabaseServerName sourceservername `

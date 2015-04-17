@@ -1,4 +1,12 @@
-﻿<#
+﻿# Copyright (c) 2015 Jan Hoek
+# https://github.com/jhoek/UncommonSense.Nav.Automation
+
+# These functions use the CSide Integration Utilities library 
+# written by Thaddeus Ryker, licensed under the Apache 2.0 License. 
+# The source is obtainable at 
+# http://code.edgerunner.org/dynamics-nav-client-interface-library. 
+
+<#
 .Synopsis
    Outputs a list of running NAV Development clients
 #>

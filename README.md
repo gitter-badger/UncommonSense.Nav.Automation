@@ -1,18 +1,19 @@
-# NAV PowerShell Utils
+# UncommonSense.Nav.Automation 
+*PowerShell Utils for Microsoft Dynamics NAV*
 
-##Notes
+###Notes
 These functions support virtually all NAV versions - even versions that don't have native PowerShell or CLI (command line interface) support. Due to the technology used, the functions will only work in 32-bit (x86) PowerShell environments.
 
-##Get-NAVDevelopmentClient
+###Get-NAVDevelopmentClient
 Retrieves a list of running IDE instances. Pipe the output to Where-Object to filter.
 
-##Get-NAVApplicationObjectInfo
+###Get-NAVApplicationObjectInfo
 Retrieves a list of custom objects containing information about NAV objects, according to the (optional) filters specified. Can receive pipeline input from Get-NAVDevelopmentClient. Note that, for most practical purposes, the `TypeFilter` parameter should be set to at least `<>TableData`.
 
-##Export-NAVApplicationObject
+###Export-NAVApplicationObject
 Exports NAV objects from the selected NAV development environment instance. Can receive pipeline input from Get-NAVDevelopmentClient or Get-NAVApplicationObjectInfo.
 
-##Examples
+###Examples
 ```powershell
 $ModifiedObjects = Get-NavApplicationObjectInfo `
     -DatabaseServerType SQL `
@@ -33,5 +34,5 @@ $ModifiedObjects | Export-NAVApplicationObject `
     -DatabaseName targetdatabasename `
     -Path targetpath
 ```
-##Acknowledgements
+###Acknowledgements
 These functions use the CSide Integration Utilities library written by Thaddeus Ryker, licensed under the Apache 2.0 License. The source is obtainable at http://code.edgerunner.org/dynamics-nav-client-interface-library. 

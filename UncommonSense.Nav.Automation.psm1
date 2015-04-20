@@ -243,7 +243,15 @@ function Compile-NAVApplicationObject
         # the Begin section.
         Write-Verbose "Connecting to $DatabaseServerType server $DatabaseServer, database $DatabaseName"
         $Client = [Org.Edgerunner.Dynamics.Nav.CSide.Client]::GetClient($DatabaseServerType, $($DatabaseServer.ToUpperInvariant()), $($DatabaseName.ToUpperInvariant()), $Null)
-        $Client.CompileObject([Org.Edgerunner.Dynamics.Nav.CSide.NavObjectType]$Type, $ID)
+
+        try
+        {
+            $Client.CompileObject([Org.Edgerunner.Dynamics.Nav.CSide.NavObjectType]$Type, $ID)
+        }
+        catch
+        {
+            Write-Error $_.Exception.InnerException.Message
+        }
     }
     End
     {

@@ -250,7 +250,14 @@ function Compile-NAVApplicationObject
         }
         catch
         {
-            Write-Error $_.Exception.InnerException.Message
+            if ($_.Exception.InnerException) 
+            {
+                Write-Error $_.Exception.InnerException.Message
+            }
+            else
+            {
+                Write-Error $_.Exception.Message
+            }
         }
     }
     End

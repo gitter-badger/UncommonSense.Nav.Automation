@@ -6,6 +6,32 @@
 # The source is obtainable at 
 # http://code.edgerunner.org/dynamics-nav-client-interface-library. 
 
+function Get-NAVClient
+{
+    param
+    (
+        # Type of server to connect to (native or Microsoft SQL Server)
+        [ValidateSet('SQL', 'Native')]
+        [string]$DatabaseServerType = 'SQL',
+
+        # Name of the server to connect to
+        [string]$DatabaseServer = '.',
+
+        # Name of the database to open
+        [Parameter(Mandatory=$true)]
+        [ValidateNotNullOrEmpty()]
+        [string]$DatabaseName
+    )
+
+    Write-Verbose "Looking for a client connected to $DatabaseServerType server $DatabaseServer with database $DatabaseName."
+    [Org.Edgerunner.Dynamics.Nav.CSide.Client]::GetClient($DatabaseServerType, $($DatabaseServer.ToUpperInvariant()), $($DatabaseName.ToUpperInvariant()), $Null)
+
+    if (-not $Client)
+    {
+        throw "A client connected to $DatabaseServerType server $DatabaseServer with database $DatabaseName is not running."
+    }
+}
+
 <#
 .Synopsis
    Outputs a list of running NAV Development clients
@@ -88,8 +114,7 @@ function Get-NAVApplicationObjectInfo
     }
     Process
     {
-        Write-Verbose "Connecting to $DatabaseServerType server $DatabaseServer, database $DatabaseName"
-        $Client = [Org.Edgerunner.Dynamics.Nav.CSide.Client]::GetClient($DatabaseServerType, $($DatabaseServer.ToUpperInvariant()), $($DatabaseName.ToUpperInvariant()), $Null)
+        $Client = Get-NAVClient -DatabaseServerType $DatabaseServerType -DatabaseServer $DatabaseServer -DatabaseName $DatabaseName
         $ObjectTable = $Client.GetTable($ObjectTableID)
 
         if ($TypeFilter) { $ObjectTable.SetFilter($TypeFieldNo, $TypeFilter) }
@@ -172,10 +197,8 @@ function Export-NAVApplicationObject
         # Through the pipeline, we may receive multiple NAV development clients, or multiple
         # object types/IDs. Because of the former, we are getting the client below, not in 
         # the Begin section.
-        Write-Verbose "Connecting to $DatabaseServerType server $DatabaseServer, database $DatabaseName"
-        $Client = [Org.Edgerunner.Dynamics.Nav.CSide.Client]::GetClient($DatabaseServerType, $($DatabaseServer.ToUpperInvariant()), $($DatabaseName.ToUpperInvariant()), $Null)
-
-        $memoryStream = $client.ReadObjectToStream($type, $id) 
+        $Client = Get-NAVClient -DatabaseServerType $DatabaseServerType -DatabaseServer $DatabaseServer -DatabaseName $DatabaseName
+        $memoryStream = $Client.ReadObjectToStream($type, $id) 
 
         $bytes = New-Object Byte[]($memoryStream.Length)
         $memoryStream.Seek(0, [System.IO.SeekOrigin]::Begin) | Out-Null
@@ -241,26 +264,15 @@ function Compile-NAVApplicationObject
         # Through the pipeline, we may receive multiple NAV development clients, or multiple
         # object types/IDs. Because of the former, we are getting the client below, not in 
         # the Begin section.
-        Write-Verbose "Connecting to $DatabaseServerType server $DatabaseServer, database $DatabaseName"
-        $Client = [Org.Edgerunner.Dynamics.Nav.CSide.Client]::GetClient($DatabaseServerType, $($DatabaseServer.ToUpperInvariant()), $($DatabaseName.ToUpperInvariant()), $Null)
-
-        try
-        {
-            $Client.CompileObject([Org.Edgerunner.Dynamics.Nav.CSide.NavObjectType]$Type, $ID)
-        }
-        catch
-        {
-            if ($_.Exception.InnerException) 
-            {
-                Write-Error $_.Exception.InnerException.Message
-            }
-            else
-            {
-                Write-Error $_.Exception.Message
-            }
-        }
+        $Client = Get-NAVClient -DatabaseServerType $DatabaseServerType -DatabaseServer $DatabaseServer -DatabaseName $DatabaseName
+        $Client.CompileObject([Org.Edgerunner.Dynamics.Nav.CSide.NavObjectType]$Type, $ID)
     }
     End
     {
     }
 }
+
+Export-ModuleMember -Function Get-NAVDevelopmentClient
+Export-ModuleMember -Function Get-NAVApplicationObjectInfo
+Export-ModuleMember -Function Export-NAVApplicationObject
+Export-ModuleMember -Function Compile-NAVApplicationObject

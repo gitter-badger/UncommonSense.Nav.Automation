@@ -15,7 +15,7 @@ function Get-NAVClient
         [string]$DatabaseServerType = 'SQL',
 
         # Name of the server to connect to
-        [string]$DatabaseServer = '.',
+        [string]$DatabaseServer,
 
         # Name of the database to open
         [Parameter(Mandatory=$true)]
@@ -78,7 +78,7 @@ function Get-NAVApplicationObjectInfo
 
         # Name of the server to connect to
         [Parameter(ValueFromPipeLineByPropertyName=$true)]
-        [string]$DatabaseServer = '.',
+        [string]$DatabaseServer,
 
         # Name of the database to open
         [Parameter(Mandatory=$true,ValueFromPipeLineByPropertyName=$true)]
@@ -168,7 +168,7 @@ function Export-NAVApplicationObject
         # you want to export from is attached. The default value is the default
         # instance on the local host (.).
         [Parameter(ValueFromPipeLineByPropertyName=$true)]
-        [string]$DatabaseServer = '.',
+        [string]$DatabaseServer,
 
         # Specifies the file to export to.
         [Parameter(Mandatory=$true)]
@@ -242,7 +242,7 @@ function Compile-NAVApplicationObject
         # you want to export from is attached. The default value is the default
         # instance on the local host (.).
         [Parameter(ValueFromPipeLineByPropertyName=$true)]
-        [string]$DatabaseServer = '.',
+        [string]$DatabaseServer,
 
         # Specifies the type of the object to export
         [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true)]

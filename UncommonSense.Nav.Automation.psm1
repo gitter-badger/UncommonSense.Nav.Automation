@@ -24,12 +24,14 @@ function Get-NAVClient
     )
 
     Write-Verbose "Looking for a client connected to $DatabaseServerType server $DatabaseServer with database $DatabaseName."
-    [Org.Edgerunner.Dynamics.Nav.CSide.Client]::GetClient($DatabaseServerType, $($DatabaseServer.ToUpperInvariant()), $($DatabaseName.ToUpperInvariant()), $Null)
+    $Client = [Org.Edgerunner.Dynamics.Nav.CSide.Client]::GetClient($DatabaseServerType, $($DatabaseServer.ToUpperInvariant()), $($DatabaseName.ToUpperInvariant()), $Null)
 
     if (-not $Client)
     {
         throw "A client connected to $DatabaseServerType server $DatabaseServer with database $DatabaseName is not running."
     }
+
+    $Client
 }
 
 <#

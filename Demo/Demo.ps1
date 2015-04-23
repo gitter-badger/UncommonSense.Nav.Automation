@@ -1,6 +1,4 @@
 ﻿. $(Join-Path $PSScriptRoot 'Compare-NAVApplication.ps1')
-. $(Join-Path $PSScriptRoot 'Get-NAVApplicationObjectInfo.ps1')
-. $(Join-Path $PSScriptRoot 'Export-NAVApplicationObject')
 
 $SourceConfigName = 'SHIPIT2009R2NATIVE'
 $TargetConfigName = 'SHIPIT2009R2'

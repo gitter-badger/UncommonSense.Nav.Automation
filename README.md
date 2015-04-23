@@ -13,10 +13,10 @@ Retrieves a list of running IDE instances. Pipe the output to Where-Object to fi
 Retrieves a list of custom objects containing information about NAV objects, according to the (optional) filters specified. Can receive pipeline input from Get-NAVDevelopmentClient. Note that, for most practical purposes, the `TypeFilter` parameter should be set to at least `<>TableData`.
 
 ###Export-NAVApplicationObject
-Exports NAV objects from the selected NAV development environment instance. Can receive pipeline input from Get-NAVDevelopmentClient or Get-NAVApplicationObjectInfo.
+Exports NAV objects from the selected NAV development environment instance. Can receive pipeline input from Get-NAVDevelopmentClient (if you need to export the same object from multiple databases) or Get-NAVApplicationObjectInfo (if you need to export a set of objects from a single database).
 
 ###Compile-NAVApplicationObject
-Compiles NAV objects from the selected NAV development environment instance. Can receive pipeline input from Get-NAVDevelopmentClient or Get-NAVApplicationObjectInfo.
+Compiles NAV objects from the selected NAV development environment instance. Can receive pipeline input from Get-NAVDevelopmentClient (if you need to compile the same object in multiple databases) or Get-NAVApplicationObjectInfo (if you need to export a set of objects in a single database).
 
 ###Examples
 ```powershell

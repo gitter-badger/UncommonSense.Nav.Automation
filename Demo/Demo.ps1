@@ -1,7 +1,7 @@
 ﻿. $(Join-Path $PSScriptRoot 'Compare-NAVApplication.ps1')
 
-$SourceConfigName = 'SHIPIT2009R2NATIVE'
-$TargetConfigName = 'SHIPIT2009R2'
+$SourceConfigName = '2009R2NATIVE'
+$TargetConfigName = '2015SQL'
 $CompareToolFileName = 'C:\Program Files\Araxis\Araxis Merge\Compare.exe'
 
 $BaseFolderName = [System.Environment]::GetFolderPath('Desktop')

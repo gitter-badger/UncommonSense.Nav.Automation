@@ -11,4 +11,4 @@ This folder contains a demo script (`Demo.ps1`) that demonstrates some of the po
 
 `Demo.ps1` contains some hard-coded references to source/target configurations and the compare tool path. Add your own configurations to configs.txt, and update `Demo.ps1` so that it uses configurations relevant for your way of working. 
 
-_IMPORTANT:_ In its current form, the script will delete the source and target folders (should they exist) before recreating them and exporting your objects. Before running the script, choose your `$BaseFolderName` so that `$SourceFolderName` and `$TargetFolderName` don't point to folder you wouldn't want to lose.
+_IMPORTANT:_ In its current form, the script will delete the source and target folders (should they exist) before recreating them and exporting your objects. Before running the script, choose your `$BaseFolderName` so that `$SourceFolderName` and `$TargetFolderName` don't point to folders you wouldn't want to lose.

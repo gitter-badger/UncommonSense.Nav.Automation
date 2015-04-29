@@ -308,6 +308,7 @@ function Compile-NAVApplicationObject
 }
 
 Export-ModuleMember -Function Get-NAVDevelopmentClient
+Export-ModuleMember -Function Start-NAVDevelopmentClient
 Export-ModuleMember -Function Get-NAVApplicationObjectInfo
 Export-ModuleMember -Function Export-NAVApplicationObject
 Export-ModuleMember -Function Compile-NAVApplicationObject

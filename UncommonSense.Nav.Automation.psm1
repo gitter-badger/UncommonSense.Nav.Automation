@@ -66,6 +66,39 @@ function Get-NAVDevelopmentClient
 
 <#
 .Synopsis
+   Starts a NAV Development client
+#>
+function Start-NAVDevelopmentClient
+{
+    Param
+    (
+        [Parameter(Mandatory=$true)]
+        [ValidateNotNullOrEmpty()]
+        [ValidateScript({ Test-Path $_ })]
+        [string]$DevEnvFilePath,
+
+        [Parameter(Mandatory=$true)]
+        [ValidateNotNullOrEmpty()]
+        [string]$ServerName,
+
+        [Parameter(Mandatory=$true)]
+        [ValidateNotNullOrEmpty()]
+        [string]$Database,
+
+        [string]$ID
+    )
+
+    $Arguments = @()
+    $Arguments += ('servername={0}' -f $ServerName)
+    $Arguments += ('database={0}' -f $Database)
+    if ($ID) { $Arguments.Add('id={0}' -f $ID)  }
+
+    $ArgumentList = $Arguments -join ','
+    Start-Process -FilePath $DevEnvFilePath -ArgumentList $ArgumentList
+}
+
+<#
+.Synopsis
    Retrieves information about NAV objects that match the optional filter criteria
 #>
 function Get-NAVApplicationObjectInfo

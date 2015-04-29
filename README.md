@@ -10,6 +10,9 @@ Place the PowerShell script module (UncommonSense.Nav.Automation.psm1) in your m
 ###Get-NAVDevelopmentClient
 Retrieves a list of running IDE instances. Pipe the output to Where-Object to filter.
 
+###Start-NAVDevelopmentClient
+Starts a NAV development client, using specified file path, servername and database.
+
 ###Get-NAVApplicationObjectInfo
 Retrieves a list of custom objects containing information about NAV objects, according to the (optional) filters specified. Can receive pipeline input from Get-NAVDevelopmentClient. Note that, for most practical purposes, the `TypeFilter` parameter should be set to at least `<>TableData`.
 

@@ -94,7 +94,7 @@ function Start-NAVDevelopmentClient
     if ($ID) { $Arguments.Add('id={0}' -f $ID)  }
 
     $ArgumentList = $Arguments -join ','
-    Start-Process -FilePath $DevEnvFilePath -ArgumentList $ArgumentList
+    Start-Process -FilePath $DevEnvFilePath -ArgumentList $ArgumentList -PassThru
 }
 
 <#

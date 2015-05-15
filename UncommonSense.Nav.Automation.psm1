@@ -226,6 +226,16 @@ function Export-NAVApplicationObject
     {
         $HelperLibraryFileName = Join-Path $PSScriptRoot Org.Edgerunner.Dynamics.Nav.CSide.dll
         Add-Type -Path $HelperLibraryFileName
+
+        if ($Force)
+        {
+            $FolderName = [System.IO.Path]::GetDirectoryName($Path)
+
+            if (-not (Test-Path -Path $FolderName))
+            {
+                New-Item -Path $FolderName -ItemType Container
+            }
+        }
     }
     Process
     {

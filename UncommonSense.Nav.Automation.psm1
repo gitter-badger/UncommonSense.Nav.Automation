@@ -85,7 +85,9 @@ function Start-NAVDevelopmentClient
         [ValidateNotNullOrEmpty()]
         [string]$Database,
 
-        [string]$ID
+        [string]$ID,
+
+        [Switch]$PassThru
     )
 
     $Arguments = @()
@@ -94,7 +96,12 @@ function Start-NAVDevelopmentClient
     if ($ID) { $Arguments.Add('id={0}' -f $ID)  }
 
     $ArgumentList = $Arguments -join ','
-    Start-Process -FilePath $DevEnvFilePath -ArgumentList $ArgumentList -PassThru
+    $Process = Start-Process -FilePath $DevEnvFilePath -ArgumentList $ArgumentList -PassThru
+
+    if ($PassThru)
+    {
+        $Process
+    }
 }
 
 <#

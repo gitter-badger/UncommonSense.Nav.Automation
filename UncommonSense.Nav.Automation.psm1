@@ -212,7 +212,7 @@ function Export-NAVApplicationObject
         [Parameter(ValueFromPipeLineByPropertyName=$true)]
         [string]$DatabaseServer,
 
-        # Specifies the file to export to.
+        # Specifies the folder to export to.
         [Parameter(Mandatory=$true)]
         [ValidateNotNullOrEmpty()]
         [string]$Path = $Pwd,
@@ -236,11 +236,9 @@ function Export-NAVApplicationObject
 
         if ($Force)
         {
-            $FolderName = [System.IO.Path]::GetDirectoryName($Path)
-
-            if (-not (Test-Path -Path $FolderName))
+            if (-not (Test-Path -Path $Path))
             {
-                New-Item -Path $FolderName -ItemType Container
+                New-Item -Path $Path -ItemType Container
             }
         }
     }

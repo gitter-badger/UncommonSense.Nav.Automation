@@ -6,18 +6,15 @@ function Start-NAVDevelopmentClient
 {
     Param
     (
-        [Parameter(Mandatory=$true)]
-        [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
         [ValidateScript({ Test-Path $_ })]
         [string]$DevEnvFilePath,
 
-        [Parameter(Mandatory=$true)]
-        [ValidateNotNullOrEmpty()]
-        [string]$ServerName,
+        [Parameter(Mandatory)]
+        [string]$DatabaseServerName,
 
-        [Parameter(Mandatory=$true)]
-        [ValidateNotNullOrEmpty()]
-        [string]$Database,
+        [Parameter(Mandatory)]
+        [string]$DatabaseName,
 
         [string]$ID,
 

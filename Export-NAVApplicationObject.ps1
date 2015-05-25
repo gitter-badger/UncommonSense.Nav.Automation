@@ -8,23 +8,20 @@ function Export-NAVApplicationObject
     Param
     (
         # Specifies the type of server to connect to (native or Microsoft SQL Server)
-        [Parameter(ValueFromPipelineByPropertyName=$true)]
         [ValidateSet('SQL', 'Native')]
         [string]$DatabaseServerType = 'SQL',
 
         # Specifies the name of the database from which you want to export.
-        [Parameter(Mandatory=$true,ValueFromPipeLineByPropertyName=$true)]
-        [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
         [string]$DatabaseName,
 
         # Specifies the name of the SQL server instance to which the database
-        # you want to export from is attached. The default value is the default
-        # instance on the local host (.).
-        [Parameter(ValueFromPipeLineByPropertyName=$true)]
+        # you want to export from is attached. 
+        [Parameter(Mandatory)]
         [string]$DatabaseServer,
 
         # Specifies the folder to export to.
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory)]
         [ValidateNotNullOrEmpty()]
         [string]$Path = $Pwd,
 
@@ -44,6 +41,7 @@ function Export-NAVApplicationObject
     {
         $HelperLibraryFileName = Join-Path $PSScriptRoot Org.Edgerunner.Dynamics.Nav.CSide.dll
         Add-Type -Path $HelperLibraryFileName
+        $Client = Get-NAVClient -DatabaseServerType $DatabaseServerType -DatabaseServer $DatabaseServer -DatabaseName $DatabaseName
 
         if ($Force)
         {
@@ -55,10 +53,6 @@ function Export-NAVApplicationObject
     }
     Process
     {
-        # Through the pipeline, we may receive multiple NAV development clients, or multiple
-        # object types/IDs. Because of the former, we are getting the client below, not in 
-        # the Begin section.
-        $Client = Get-NAVClient -DatabaseServerType $DatabaseServerType -DatabaseServer $DatabaseServer -DatabaseName $DatabaseName
         $memoryStream = $Client.ReadObjectToStream($type, $id) 
 
         $bytes = New-Object Byte[]($memoryStream.Length)

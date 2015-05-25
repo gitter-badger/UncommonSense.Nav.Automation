@@ -37,13 +37,10 @@ function Compile-NAVApplicationObject
     {
         $HelperLibraryFileName = Join-Path $PSScriptRoot Org.Edgerunner.Dynamics.Nav.CSide.dll
         Add-Type -Path $HelperLibraryFileName
+        $Client = Get-NAVClient -DatabaseServerType $DatabaseServerType -DatabaseServer $DatabaseServer -DatabaseName $DatabaseName
     }
     Process
     {
-        # Through the pipeline, we may receive multiple NAV development clients, or multiple
-        # object types/IDs. Because of the former, we are getting the client below, not in 
-        # the Begin section.
-        $Client = Get-NAVClient -DatabaseServerType $DatabaseServerType -DatabaseServer $DatabaseServer -DatabaseName $DatabaseName
         $Client.CompileObject([Org.Edgerunner.Dynamics.Nav.CSide.NavObjectType]$Type, $ID)
     }
     End

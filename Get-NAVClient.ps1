@@ -7,11 +7,11 @@
         [string]$DatabaseServerType = 'SQL',
 
         # Name of the server to connect to
+        [Parameter(Mandatory)]
         [string]$DatabaseServer,
 
         # Name of the database to open
-        [Parameter(Mandatory=$true)]
-        [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
         [string]$DatabaseName
     )
 

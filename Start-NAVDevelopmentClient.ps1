@@ -16,6 +16,9 @@ function Start-NAVDevelopmentClient
         [Parameter(Mandatory)]
         [string]$DatabaseName,
 
+        [ValidateSet('Hidden', 'Maximized', 'Minimized', 'Normal')]
+        [string]$WindowStyle = 'Normal',
+
         [string]$ID,
 
         [Switch]$PassThru
@@ -27,7 +30,7 @@ function Start-NAVDevelopmentClient
     if ($ID) { $Arguments.Add('id={0}' -f $ID)  }
 
     $ArgumentList = $Arguments -join ','
-    $Process = Start-Process -FilePath $DevEnvFilePath -ArgumentList $ArgumentList -PassThru
+    $Process = Start-Process -FilePath $DevEnvFilePath -ArgumentList $ArgumentList -WindowStyle $WindowStyle -PassThru 
 
     if ($PassThru)
     {

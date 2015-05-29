@@ -25,8 +25,8 @@ function Start-NAVDevelopmentClient
     )
 
     $Arguments = @()
-    $Arguments += ('servername={0}' -f $ServerName)
-    $Arguments += ('database={0}' -f $Database)
+    $Arguments += ('servername={0}' -f $DatabaseServerName)
+    $Arguments += ('database={0}' -f $DatabaseName)
     if ($ID) { $Arguments.Add('id={0}' -f $ID)  }
 
     $ArgumentList = $Arguments -join ','

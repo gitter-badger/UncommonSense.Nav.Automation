@@ -1,6 +1,6 @@
 # UncommonSense.Nav.Automation Demo script
 
-This folder contains a demo script (`Demo.ps1`) that demonstrates some of the possibilities of UncommonSense.Nav.Automation. Since your working procedures are very likely to differ from mine, I strongly encourage you to take the script as your starting point and tweak it as you see fit.
+This folder contains a demo script (`Demo.ps1`) that demonstrates some of the possibilities of UncommonSense.Nav.Automation. Since your working procedures are very likely to differ from mine, I strongly encourage you to take the script as your starting point and tweak it as you see fit. To use it, first install the script module from the main folder of this repo, according to the steps in the README.md there.
 
 `Demo.ps1` uses:
 

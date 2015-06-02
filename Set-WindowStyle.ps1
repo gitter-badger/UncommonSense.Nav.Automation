@@ -4,29 +4,18 @@ function Set-WindowStyle
 {
     param(
         [Parameter()]
-        [ValidateSet('FORCEMINIMIZE', 'HIDE', 'MAXIMIZE', 'MINIMIZE', 'RESTORE', 
-                     'SHOW', 'SHOWDEFAULT', 'SHOWMAXIMIZED', 'SHOWMINIMIZED', 
-                     'SHOWMINNOACTIVE', 'SHOWNA', 'SHOWNOACTIVATE', 'SHOWNORMAL')]
-        $Style = 'SHOW',
+        [ValidateSet('Hidden', 'Maximized', 'Minimized', 'Normal')]
+        [string]$WindowStyle = 'Normal',
     
         [Parameter(ValueFromPipeLineByPropertyName)]
         $MainWindowHandle = (Get-Process -Id $pid).MainWindowHandle
     )
 
     $WindowStates = @{
-        'FORCEMINIMIZE'   = 11
-        'HIDE'            = 0
-        'MAXIMIZE'        = 3
-        'MINIMIZE'        = 6
-        'RESTORE'         = 9
-        'SHOW'            = 5
-        'SHOWDEFAULT'     = 10
-        'SHOWMAXIMIZED'   = 3
-        'SHOWMINIMIZED'   = 2
-        'SHOWMINNOACTIVE' = 7
-        'SHOWNA'          = 8
-        'SHOWNOACTIVATE'  = 4
-        'SHOWNORMAL'      = 1
+        'Hidden'    = 0
+        'Maximized' = 3
+        'Minimized' = 6
+        'Normal'    = 1
     }
     
     $Win32ShowWindowAsync = Add-Type `

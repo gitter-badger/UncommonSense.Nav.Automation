@@ -12,6 +12,7 @@
 . (Join-Path $PSScriptRoot Get-NAVApplicationObjectInfo.ps1)
 . (Join-Path $PSScriptRoot Export-NAVApplicationObject.ps1)
 . (Join-Path $PSScriptRoot Compile-NAVApplicationObject.ps1)
+. (Join-Path $PSScriptRoot Set-WindowStyle.ps1)
 
 Export-ModuleMember -Function Get-NAVDevelopmentClient
 Export-ModuleMember -Function Start-NAVDevelopmentClient

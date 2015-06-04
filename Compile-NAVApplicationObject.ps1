@@ -25,7 +25,7 @@ function Compile-NAVApplicationObject
 
         # Specifies the type of the object to export
         [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
-        [ValidateSet('TableData','Table','Form','Report','Dataport','Codeunit','XMLport','MenuSuite','Page')]
+        [ValidateSet('TableData','Table','Form','Report','Dataport','Codeunit','XMLport','MenuSuite','Page','Query')]
         [string]$Type,
 
         # Specifies the ID of the object to export

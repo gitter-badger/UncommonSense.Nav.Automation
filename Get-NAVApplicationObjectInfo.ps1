@@ -42,7 +42,7 @@ function Get-NAVApplicationObjectInfo
     Set-Variable DateFieldNo -Option Constant -Value 10
     Set-Variable TimeFieldNo -Option Constant -Value 11
     Set-Variable VersionListFieldNo -Option Constant -Value 12    
-    $TypeNames = 'TableData','Table','Form','Report','Dataport','Codeunit','XMLport','MenuSuite','Page',,'System','FieldNumber'
+    $TypeNames = 'TableData','Table','Form','Report','Dataport','Codeunit','XMLport','MenuSuite','Page','Query','System','FieldNumber'
 
     $Client = Get-NAVClient -DatabaseServerType $DatabaseServerType -DatabaseServer $DatabaseServer -DatabaseName $DatabaseName
     $ObjectTable = $Client.GetTable($ObjectTableID)

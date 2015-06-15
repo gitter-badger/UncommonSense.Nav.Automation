@@ -32,8 +32,11 @@ function Start-NAVDevelopmentClient
     $ArgumentList = $Arguments -join ','
     $Process = Start-Process -FilePath $DevEnvFilePath -ArgumentList $ArgumentList -PassThru 
 
-    $Process.WaitForInputIdle()
-    $Process | Set-WindowStyle -WindowStyle Minimized
+    if ($WindowStyle -ne 'Normal')
+    {
+        Start-Sleep -Seconds 1
+        Set-WindowStyle -MainWindowHandle $Process.MainWindowHandle -WindowStyle $WindowStyle
+    }
 
     if ($PassThru)
     {

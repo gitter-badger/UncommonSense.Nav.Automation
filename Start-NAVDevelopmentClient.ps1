@@ -30,7 +30,10 @@ function Start-NAVDevelopmentClient
     if ($ID) { $Arguments.Add('id={0}' -f $ID)  }
 
     $ArgumentList = $Arguments -join ','
-    $Process = Start-Process -FilePath $DevEnvFilePath -ArgumentList $ArgumentList -WindowStyle $WindowStyle -PassThru 
+    $Process = Start-Process -FilePath $DevEnvFilePath -ArgumentList $ArgumentList -PassThru 
+
+    $Process.WaitForInputIdle()
+    $Process | Set-WindowStyle -WindowStyle Minimized
 
     if ($PassThru)
     {

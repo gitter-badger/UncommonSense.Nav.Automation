@@ -24,6 +24,6 @@ function Set-WindowStyle
         -Namespace Win32Functions `
         -PassThru
     
-    $Win32ShowWindowAsync::ShowWindowAsync($MainWindowHandle, $WindowStates[$Style]) | Out-Null
-    Write-Verbose ("Set Window Style '{1} on '{0}'" -f $MainWindowHandle, $Style)
+    $Win32ShowWindowAsync::ShowWindowAsync($MainWindowHandle, $WindowStates[$WindowStyle]) | Out-Null
+    Write-Verbose ("Set Window Style '{1} on '{0}'" -f $MainWindowHandle, $WindowStyle)
 }

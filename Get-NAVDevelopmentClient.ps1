@@ -6,9 +6,6 @@ function Get-NAVDevelopmentClient
 {
     [CmdletBinding()]
 
-    $HelperLibraryFileName = Join-Path $PSScriptRoot Org.Edgerunner.Dynamics.Nav.CSide.dll
-    Add-Type -Path $HelperLibraryFileName
-
     $Clients = [Org.Edgerunner.Dynamics.Nav.CSide.Client]::GetClients($true) 
     
     foreach($Client in $Clients)

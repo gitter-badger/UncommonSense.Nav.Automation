@@ -35,8 +35,6 @@ function Compile-NAVApplicationObject
 
     Begin
     {
-        $HelperLibraryFileName = Join-Path $PSScriptRoot Org.Edgerunner.Dynamics.Nav.CSide.dll
-        Add-Type -Path $HelperLibraryFileName
         $Client = Get-NAVClient -DatabaseServerType $DatabaseServerType -DatabaseServer $DatabaseServer -DatabaseName $DatabaseName
     }
     Process

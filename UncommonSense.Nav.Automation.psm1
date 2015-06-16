@@ -6,6 +6,8 @@
 # The source is obtainable at 
 # http://code.edgerunner.org/dynamics-nav-client-interface-library. 
 
+Add-Type -Path (Join-Path $PSScriptRoot Org.Edgerunner.Dynamics.Nav.CSide.dll)
+
 . (Join-Path $PSScriptRoot Get-NAVClient.ps1)
 . (Join-Path $PSScriptRoot Get-NAVDevelopmentClient.ps1)
 . (Join-Path $PSScriptRoot Start-NAVDevelopmentClient.ps1)

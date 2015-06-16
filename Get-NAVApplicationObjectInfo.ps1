@@ -30,9 +30,6 @@ function Get-NAVApplicationObjectInfo
         [string]$VersionListFilter
     )
 
-    $HelperLibraryFileName = Join-Path $PSScriptRoot Org.Edgerunner.Dynamics.Nav.CSide.dll
-    Add-Type -Path $HelperLibraryFileName
-
     Set-Variable ObjectTableID -Option Constant -Value 2000000001
     Set-Variable TypeFieldNo -Option Constant -Value 1
     Set-Variable IDFieldNo -Option Constant -Value 3

@@ -27,7 +27,7 @@
     }
 
     Write-Verbose "Looking for a client connected to $DatabaseServerType server $DatabaseServer with database $DatabaseName."
-    $Client = [Org.Edgerunner.Dynamics.Nav.CSide.Client]::GetClient($DatabaseServerType, $($DatabaseServer.ToUpperInvariant()), $($DatabaseName.ToUpperInvariant()), $Null)
+    $Client = [Org.Edgerunner.Dynamics.Nav.CSide.Client]::GetClient($DatabaseServerType, $($DatabaseServer.ToUpperInvariant()), $DatabaseName, $Null)
 
     if (-not $Client)
     {

@@ -22,7 +22,7 @@
 
     if ($List)
     {
-        [Org.Edgerunner.Dynamics.Nav.CSide.Client]::GetClients() 
+        [Org.Edgerunner.Dynamics.Nav.CSide.Client]::GetClients() | Select-Object -Property * -ExcludeProperty Tables, Objects
         return
     }
 

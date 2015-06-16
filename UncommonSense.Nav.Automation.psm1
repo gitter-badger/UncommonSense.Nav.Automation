@@ -8,7 +8,6 @@
 
 Add-Type -Path (Join-Path $PSScriptRoot Org.Edgerunner.Dynamics.Nav.CSide.dll)
 
-. (Join-Path $PSScriptRoot Get-NAVClient.ps1)
 . (Join-Path $PSScriptRoot Get-NAVDevelopmentClient.ps1)
 . (Join-Path $PSScriptRoot Start-NAVDevelopmentClient.ps1)
 . (Join-Path $PSScriptRoot Get-NAVApplicationObjectInfo.ps1)

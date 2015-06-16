@@ -1,26 +1,38 @@
-﻿<#
-.Synopsis
-   Outputs a list of running NAV Development clients
-#>
-function Get-NAVDevelopmentClient
+﻿function Get-NAVDevelopmentClient
 {
-    [CmdletBinding()]
+    param
+    (
+        # Type of server to connect to (native or Microsoft SQL Server)
+        [Parameter(ParameterSetName="FromConfig")]
+        [ValidateSet('SQL', 'Native')]
+        [string]$DatabaseServerType = 'SQL',
 
-    $Clients = [Org.Edgerunner.Dynamics.Nav.CSide.Client]::GetClients($true) 
-    
-    foreach($Client in $Clients)
+        # Name of the server to connect to
+        [Parameter(Mandatory, ParameterSetName="FromConfig")]
+        [string]$DatabaseServer,
+
+        # Name of the database to open
+        [Parameter(Mandatory, ParameterSetName="FromConfig")]
+        [string]$DatabaseName,
+
+        # List the running development clients
+        [Parameter(Mandatory,ParameterSetName="List")]
+        [Switch]$List
+    )
+
+    if ($List)
     {
-        # Build a custom object with the relevant properties, so that what we output to the 
-        # pipeline has no dependency on Org.Edgerunner.Dynamics.Nav.CSide.dll.
-        # 
-
-        $CustomObject = New-Object System.Object
-        $CustomObject | Add-Member -Type NoteProperty -Name CSideVersion -Value $Client.CSideVersion
-        $CustomObject | Add-Member -Type NoteProperty -Name DatabaseServerType -Value $Client.ServerType.ToString()
-        $CustomObject | Add-Member -Type NoteProperty -name DatabaseServer -Value $Client.Server
-        $CustomObject | Add-Member -Type NoteProperty -name DatabaseName -Value $Client.Database
-        $CustomObject | Add-Member -Type NoteProperty -name CompanyName -Value $Client.Company
-
-        $CustomObject
+        [Org.Edgerunner.Dynamics.Nav.CSide.Client]::GetClients() 
+        return
     }
+
+    Write-Verbose "Looking for a client connected to $DatabaseServerType server $DatabaseServer with database $DatabaseName."
+    $Client = [Org.Edgerunner.Dynamics.Nav.CSide.Client]::GetClient($DatabaseServerType, $($DatabaseServer.ToUpperInvariant()), $($DatabaseName.ToUpperInvariant()), $Null)
+
+    if (-not $Client)
+    {
+        throw "A client connected to $DatabaseServerType server $DatabaseServer with database $DatabaseName is not running."
+    }
+
+    $Client
 }

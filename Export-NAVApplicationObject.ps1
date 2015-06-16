@@ -39,7 +39,7 @@ function Export-NAVApplicationObject
 
     Begin
     {
-        $Client = Get-NAVClient -DatabaseServerType $DatabaseServerType -DatabaseServer $DatabaseServer -DatabaseName $DatabaseName
+        $Client = Get-NAVDevelopmentClient -DatabaseServerType $DatabaseServerType -DatabaseServer $DatabaseServer -DatabaseName $DatabaseName
 
         if ($Force)
         {

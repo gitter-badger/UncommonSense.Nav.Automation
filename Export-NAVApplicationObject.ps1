@@ -61,10 +61,7 @@ function Export-NAVApplicationObject
         $FileName = [String]::Format("{0}{1}.txt", $type.ToString().SubString(0, 3).ToLowerInvariant(), $id)
         $FilePath = Join-Path $Path $FileName
 
-        $fileStream = New-Object -TypeName "System.IO.FileStream"("$FilePath", [System.IO.FileMode]::Create, [System.IO.FileAccess]::Write)
-        $fileStream.Write($bytes, 0, $bytes.Length) | Out-Null
-        $fileStream.Close()
-
+        [System.IO.File]::WriteAllBytes($FilePath, $Bytes)
         Get-ChildItem -Path $FilePath
     }
     End

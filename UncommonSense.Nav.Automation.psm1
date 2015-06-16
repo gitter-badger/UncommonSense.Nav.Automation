@@ -11,6 +11,7 @@ Add-Type -Path (Join-Path $PSScriptRoot Org.Edgerunner.Dynamics.Nav.CSide.dll)
 . (Join-Path $PSScriptRoot Get-NAVDevelopmentClient.ps1)
 . (Join-Path $PSScriptRoot Start-NAVDevelopmentClient.ps1)
 . (Join-Path $PSScriptRoot Get-NAVApplicationObjectInfo.ps1)
+. (Join-Path $PSScriptRoot Import-NAVApplicationObject.ps1)
 . (Join-Path $PSScriptRoot Export-NAVApplicationObject.ps1)
 . (Join-Path $PSScriptRoot Compile-NAVApplicationObject.ps1)
 . (Join-Path $PSScriptRoot Set-WindowStyle.ps1)
@@ -18,5 +19,6 @@ Add-Type -Path (Join-Path $PSScriptRoot Org.Edgerunner.Dynamics.Nav.CSide.dll)
 Export-ModuleMember -Function Get-NAVDevelopmentClient
 Export-ModuleMember -Function Start-NAVDevelopmentClient
 Export-ModuleMember -Function Get-NAVApplicationObjectInfo
+Export-ModuleMember -Function Import-NAVApplicationObject
 Export-ModuleMember -Function Export-NAVApplicationObject
 Export-ModuleMember -Function Compile-NAVApplicationObject

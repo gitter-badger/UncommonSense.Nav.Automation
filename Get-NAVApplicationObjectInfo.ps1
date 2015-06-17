@@ -7,19 +7,9 @@ function Get-NAVApplicationObjectInfo
     [CmdletBinding()]
     Param
     (
-        # Type of server to connect to (native or Microsoft SQL Server)
-        [ValidateSet('SQL', 'Native')]
-        [string]$DatabaseServerType = 'SQL',
+        [Parameter(Mandatory,ValueFromPipeLine,ValueFromPipeLineByPropertyName)]
+        [Org.Edgerunner.Dynamics.Nav.CSide.Client]$Client,
 
-        # Name of the server to connect to
-        [Parameter(Mandatory)]
-        [string]$DatabaseServer,
-
-        # Name of the database to open
-        [Parameter(Mandatory)]
-        [string]$DatabaseName,
-
-        # Filters
         [string]$TypeFilter,
         [string]$IDFilter,
         [string]$NameFilter, 
@@ -29,6 +19,8 @@ function Get-NAVApplicationObjectInfo
         [string]$TimeFilter,
         [string]$VersionListFilter
     )
+
+    Set-Variable Activity -Option Constant -Value 'Getting NAV application object information'
 
     Set-Variable ObjectTableID -Option Constant -Value 2000000001
     Set-Variable TypeFieldNo -Option Constant -Value 1
@@ -41,9 +33,10 @@ function Get-NAVApplicationObjectInfo
     Set-Variable VersionListFieldNo -Option Constant -Value 12    
     $TypeNames = 'TableData','Table','Form','Report','Dataport','Codeunit','XMLport','MenuSuite','Page','Query','System','FieldNumber'
 
-    $Client = Get-NAVDevelopmentClient -DatabaseServerType $DatabaseServerType -DatabaseServer $DatabaseServer -DatabaseName $DatabaseName
+    Write-Progress -Activity $Activity -CurrentOperation 'Opening table'
     $ObjectTable = $Client.GetTable($ObjectTableID)
 
+    Write-Progress -Activity $Activity -CurrentOperation 'Setting filters'
     if ($TypeFilter) { $ObjectTable.SetFilter($TypeFieldNo, $TypeFilter) }
     if ($IDFilter) { $ObjectTable.SetFilter($IDFieldNo, $IDFilter) }
     if ($NameFilter) { $ObjectTable.SetFilter($NameFieldNo, $NameFilter) }
@@ -53,11 +46,16 @@ function Get-NAVApplicationObjectInfo
     if ($TimeFilter) { $ObjectTable.SetFilter($TimeFieldNo, $TimeFilter) }
     if ($VersionListFilter) { $ObjectTable.SetFilter($VersionListFieldNo, $VersionListFilter) }
 
+    Write-Progress -Activity $Activity -CurrentOperation 'Fetching records'
     $ObjectRecords = $ObjectTable.FetchRecords()
     Write-Verbose "$($ObjectRecords.Count) records."
 
+    $NoOfRecords = $ObjectRecords.Count
+    $CurrentRecord = 0
+
     foreach($ObjectRecord in $ObjectRecords)
     {
+        Write-Progress -Activity $Activity -CurrentOperation 'Outputting records' -PercentComplete (($CurrentRecord / $NoOfRecords) * 100)
         $CustomObject = New-Object System.Object
         $CustomObject | Add-Member -Type NoteProperty -Name Type -Value $TypeNames[$ObjectRecord.FieldValues.Item($TypeFieldNo).Value]
         $CustomObject | Add-Member -Type NoteProperty -Name ID -Value $ObjectRecord.FieldValues.Item($IDFieldNo).Value
@@ -68,5 +66,6 @@ function Get-NAVApplicationObjectInfo
         $CustomObject | Add-Member -Type NoteProperty -Name VersionList -Value $ObjectRecord.FieldValues.Item($VersionListFieldNo).Value
 
         $CustomObject
+        $CurrentRecord++
     }
 }

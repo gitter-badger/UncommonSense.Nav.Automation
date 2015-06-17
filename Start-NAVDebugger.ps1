@@ -2,8 +2,8 @@
 .Synopsis
 Starts the NAV Debugger
 .Description
-This function opens the session list in the selected NAV client. From the session list window, you can select a session to debug.
-Configurations are taken from a comma-separated (csv) file in the module folder. Each line in the file represents a single configuration, and
+This function opens the session list window in the selected NAV client. From the session list, you can select a session to debug.
+Configurations are taken from a comma-separated (csv) file called `clients.txt` in the module folder. Each line in the file represents a single configuration, and
 consists of the following values:
 
 - ID: a unique ID for each configuration; this is the value you specify for the -Config parameter.
@@ -12,6 +12,7 @@ consists of the following values:
 - PortNo: the port number that the Microsoft Dynamics NAV Service Tier is listening to.
 - ServiceInstanceName: the name of the Microsoft Dynamics NAV Service Tier instance.
 - CompanyName: the name of the company to use during debugging.
+
 #>
 function Start-NAVDebugger
 {

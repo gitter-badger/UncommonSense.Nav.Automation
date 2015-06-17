@@ -1,0 +1,2 @@
+﻿2013NL,C:\Program Files (x86)\Microsoft Dynamics NAV\70\RoleTailored Client\Microsoft.Dynamics.Nav.Client.exe,localhost,7246,DynamicsNAV70,CRONUS Nederland BV
+2015W1,C:\Program Files (x86)\Microsoft Dynamics NAV\80\RoleTailored Client\Microsoft.Dynamics.Nav.Client.exe,localhost,7046,DynamicsNAV80,CRONUS International Ltd.

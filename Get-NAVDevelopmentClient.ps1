@@ -1,4 +1,9 @@
-﻿function Get-NAVDevelopmentClient
+﻿<#
+.Synopsis
+Retrieves a client object that represents a running Microsoft Dynamics NAV development client, 
+or a list of all running Microsoft Dynamics NAV development clients.
+#>
+function Get-NAVDevelopmentClient
 {
     param
     (

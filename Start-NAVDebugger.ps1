@@ -1,4 +1,19 @@
-﻿function Start-NAVDebugger
+﻿<#
+.Synopsis
+Starts the NAV Debugger
+.Description
+This function opens the session list in the selected NAV client. From the session list window, you can select a session to debug.
+Configurations are taken from a comma-separated (csv) file in the module folder. Each line in the file represents a single configuration, and
+consists of the following values:
+
+- ID: a unique ID for each configuration; this is the value you specify for the -Config parameter.
+- ClientExePath: the full path (including the file name) to the Microsoft Dynamics NAV Role Tailored Client.
+- ServerName: the name of the computer on which the Microsoft Dynamics NAV Service Tier is running.
+- PortNo: the port number that the Microsoft Dynamics NAV Service Tier is listening to.
+- ServiceInstanceName: the name of the Microsoft Dynamics NAV Service Tier instance.
+- CompanyName: the name of the company to use during debugging.
+#>
+function Start-NAVDebugger
 {
     [CmdletBinding()]
     Param

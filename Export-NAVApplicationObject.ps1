@@ -7,19 +7,9 @@ function Export-NAVApplicationObject
     [CmdletBinding()]
     Param
     (
-        # Specifies the type of server to connect to (native or Microsoft SQL Server)
-        [ValidateSet('SQL', 'Native')]
-        [string]$DatabaseServerType = 'SQL',
-
-        # Specifies the name of the database from which you want to export.
-        [Parameter(Mandatory)]
-        [string]$DatabaseName,
-
-        # Specifies the name of the SQL server instance to which the database
-        # you want to export from is attached. 
-        [Parameter(Mandatory)]
-        [string]$DatabaseServer,
-
+        [Parameter(Mandatory,ValueFromPipeLine,ValueFromPipeLineByPropertyName)]
+        [Org.Edgerunner.Dynamics.Nav.CSide.Client]$Client,
+    
         # Specifies the folder to export to.
         [Parameter(Mandatory)]
         [ValidateNotNullOrEmpty()]
@@ -39,8 +29,6 @@ function Export-NAVApplicationObject
 
     Begin
     {
-        $Client = Get-NAVDevelopmentClient -DatabaseServerType $DatabaseServerType -DatabaseServer $DatabaseServer -DatabaseName $DatabaseName
-
         if ($Force)
         {
             if (-not (Test-Path -Path $Path))

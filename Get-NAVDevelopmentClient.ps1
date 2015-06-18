@@ -8,16 +8,16 @@ function Get-NAVDevelopmentClient
     Param
     (
         # Type of server to connect to (native or Microsoft SQL Server)
-        [Parameter(ParameterSetName="FromConfig")]
+        [Parameter(ParameterSetName="FromSettings")]
         [ValidateSet('SQL', 'Native')]
         [string]$DatabaseServerType = 'SQL',
 
         # Name of the server to connect to
-        [Parameter(Mandatory, ParameterSetName="FromConfig")]
+        [Parameter(Mandatory, ParameterSetName="FromSettings")]
         [string]$DatabaseServerName,
 
         # Name of the database to open
-        [Parameter(Mandatory, ParameterSetName="FromConfig")]
+        [Parameter(Mandatory, ParameterSetName="FromSettings")]
         [string]$DatabaseName,
 
         # List the running development clients

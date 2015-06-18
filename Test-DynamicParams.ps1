@@ -3,17 +3,29 @@
     [CmdletBinding()]
     Param
     (
+        [Parameter(Mandatory)]
+        [ValidateSet('Native','Sql')]
+        [string]$DatabaseServerType = 'Sql'
     )
 
     DynamicParam
     {
         $ParameterDictionary = New-Object -Type System.Management.Automation.RuntimeDefinedParameterDictionary
 
-        if ((-not $PSBoundParameters.Server))
+        switch($PSBoundParameters.DatabaseServerType)
         {
-            $ParameterDictionary.Add('Server', (New-DynamicParameter -ParameterName Server))            
-            $ParameterDictionary.Add('Database', (New-DynamicParameter -ParameterName Database))            
-        }    
+            'Native'
+            {
+                $ParameterDictionary.Add('DatabaseServerName', (New-DynamicParameter -ParameterName DatabaseServerName -ParameterSetName NativeServer))            
+                $ParameterDictionary.Add('DatabaseName', (New-DynamicParameter -ParameterName DatabaseName -ParameterSetName NativeStandAlone))                            
+            }
+            
+            'SQL'
+            {
+                $ParameterDictionary.Add('DatabaseServerName', (New-DynamicParameter -ParameterName DatabaseServerName -ParameterSetName SQL))            
+                $ParameterDictionary.Add('DatabaseName', (New-DynamicParameter -ParameterName DatabaseName -ParameterSetName SQL))            
+            }
+        }
 
         return $ParameterDictionary 
     }
@@ -28,17 +40,16 @@ function New-DynamicParameter
 {
     Param
     (
-        [Parameter(Mandatory)]
-        [string]$ParameterName
+        [string]$ParameterName,
+        [string]$ParameterSetName
     )
 
     $ParameterAttribute = New-Object System.Management.Automation.ParameterAttribute
     $ParameterAttribute.Mandatory = $True
+    $ParameterAttribute.ParameterSetName = $ParameterSetName
 
     $AttributeCollection = New-Object -Type System.Collections.ObjectModel.Collection[System.Attribute]
     $AttributeCollection.Add($ParameterAttribute)
 
     New-Object -Type System.Management.Automation.RuntimeDefinedParameter($ParameterName, [string], $AttributeCollection)
 }
-
-Test-DynamicParams

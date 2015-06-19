@@ -7,66 +7,72 @@ function Get-NAVDevelopmentClient
 {
     Param
     (
-        # Connect to SQL Server
-        [Parameter(Mandatory,ParameterSetName='Sql')]
-        [Switch]$Sql,
+        # Filters running clients by server type
+        [Parameter(ParameterSetName='Filters')]
+        [ValidateSet('Native','Sql')]
+        [string]$DatabaseServerType,
 
-        # Connect to a native database (either servered or stand-alone)
-        [Parameter(Mandatory,ParameterSetName='NativeServer')]
-        [Parameter(Mandatory,ParameterSetName='NativeStandAlone')]
-        [Switch]$Native,
-
-        # Name of the server to connect to
-        [Parameter(Mandatory,ParameterSetName='Sql')]
-        [Parameter(Mandatory,ParameterSetName='NativeServer')]
+        # Filters running clients by server name
+        [Parameter(ParameterSetName='Filters')]
         [string]$DatabaseServerName,
 
-        # Name of the database to open
-        [Parameter(Mandatory,ParameterSetName='Sql')]
-        [Parameter(Mandatory,ParameterSetName='NativeStandAlone')]
+        # Filters running clients by database name
+        [Parameter(ParameterSetName='Filters')]
         [string]$DatabaseName,
 
-        # List the running development clients
-        [Parameter(Mandatory,ParameterSetName="List")]
+        # Name of the configuration list file to use
+        [Parameter(ParameterSetName='Config')]
+        [string]$ConfigListFileName = $(Join-Path $PSScriptRoot 'devclients.txt'),
+
+        # Name of the configuration to open
+        [Parameter(Mandatory,ParameterSetName='Config')]
+        [string]$ConfigName,
+
+        [Parameter(ParameterSetName='Config')]
+        [Switch]$Force,
+
+        # Return all running development clients, instead of only the first match
         [Switch]$List
     )
-
+    
     Add-Type -Path (Join-Path $PSScriptRoot Org.Edgerunner.Dynamics.Nav.CSide.dll)
-    $Clients = [Org.Edgerunner.Dynamics.Nav.CSide.Client]::GetClients() | ForEach-Object { $_ | Get-NAVDevelopmentClientInfo }
 
+    # Find config
+    if ($ConfigName)
+    {
+        $Header = 'Name,DevEnvPath,DatabaseServerType,DatabaseServerName,DatabaseName,ZupID'
+        $Config = Import-Csv -Path $ConfigListFileName -Header | Where-Object Name -eq $ConfigName
+        
+        if (-not $Config) 
+        {
+            throw "Configuration '$ConfigName' could not be found in $ConfigListFileName."
+        }
+
+        $DatabaseServerType = $Config.DatabaseServerType
+        $DatabaseServerName = $Config.DatabaseServerName 
+        $DatabaseName = $Config.DatabaseName
+    }
+
+    $FilteredClients = Get-FilteredClients -DatabaseServerType $DatabaseServerType -DatabaseServerName $DatabaseServerName -DatabaseName $DatabaseName
+
+    if ((-not $FilteredClients) -and ($ConfigName) -and ($Force))
+    {
+        # FIXME: Build $ArgumentList
+        Start-Process -FilePath $Config.DevEnvPath -ArgumentList $ArgumentList
+    }
+
+    $FilteredClients = Get-FilteredClients -DatabaseServerType $DatabaseServerType -DatabaseServerName $DatabaseServerName -DatabaseName $DatabaseName
+
+    # List mode
     if ($List)
     {
-        return $Clients
+        return $FilteredClients
     }
 
-    switch($Sql)
+    if ($FilteredClients)
     {
-        ($true) { $DatabaseServerType = 'Sql' }
-        ($false) { $DatabaseServerType = 'Native' }
+        return $FilteredClients | Select-Object -First 1
     }
-
-    $Clients = $Clients | Where-Object -Property DatabaseServerType -Eq $DatabaseServerType
-
-    if ($DatabaseServerName)
-    {
-        # Using the -Like operator, so that we can support wildcards in database server name
-        $Clients = $Clients | Where-Object -Property DatabaseServerName -Like $DatabaseServerName
-    }
-
-    if ($DatabaseName)
-    {
-        # Using the -Like operator, so that we can support wildcards in database name
-        $Clients = $Clients | Where-Object -Property DatabaseName -Like $DatabaseName
-    }
-
-    $Client = $Clients | Select-Object -First 1
-
-    if (-not $Client)
-    {
-        throw "A client connected to $DatabaseServerType server $DatabaseServerName with database $DatabaseName is not running."
-    }
-
-    $Client
 }
 
 function Get-NAVDevelopmentClientInfo
@@ -96,3 +102,31 @@ function Get-NAVDevelopmentClientInfo
         Client = $Client
     }
 }
+
+function Get-FilteredClients
+{
+    Param
+    (
+        [string]$DatabaseServerType,
+        [string]$DatabaseServerName,
+        [string]$DatabaseName
+    )
+
+     $Clients = [Org.Edgerunner.Dynamics.Nav.CSide.Client]::GetClients() | ForEach-Object { $_ | Get-NAVDevelopmentClientInfo }   
+
+    if ($DatabaseServerType) 
+    {
+        $Clients = $Clients | Where-Object -Property DatabaseServerType -Eq $DatabaseServerType
+    }
+    if ($DatabaseServerName)
+    {
+        $Clients = $Clients | Where-Object -Property DatabaseServerName -Like $DatabaseServerName
+    }
+    if ($DatabaseName)
+    {
+        $Clients = $Clients | Where-Object -Property DatabaseName -Like $DatabaseName
+    }
+
+    $Clients
+}
+

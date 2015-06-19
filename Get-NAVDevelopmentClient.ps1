@@ -7,17 +7,23 @@ function Get-NAVDevelopmentClient
 {
     Param
     (
-        # Type of server to connect to (native or Microsoft SQL Server)
-        [Parameter(ParameterSetName="FromSettings")]
-        [ValidateSet('SQL', 'Native')]
-        [string]$DatabaseServerType = 'SQL',
+        # Connect to SQL Server
+        [Parameter(Mandatory,ParameterSetName='Sql')]
+        [Switch]$Sql,
+
+        # Connect to a native database (either servered or stand-alone)
+        [Parameter(Mandatory,ParameterSetName='NativeServer')]
+        [Parameter(Mandatory,ParameterSetName='NativeStandAlone')]
+        [Switch]$Native,
 
         # Name of the server to connect to
-        [Parameter(Mandatory, ParameterSetName="FromSettings")]
+        [Parameter(Mandatory,ParameterSetName='Sql')]
+        [Parameter(Mandatory,ParameterSetName='NativeServer')]
         [string]$DatabaseServerName,
 
         # Name of the database to open
-        [Parameter(Mandatory, ParameterSetName="FromSettings")]
+        [Parameter(Mandatory,ParameterSetName='Sql')]
+        [Parameter(Mandatory,ParameterSetName='NativeStandAlone')]
         [string]$DatabaseName,
 
         # List the running development clients
@@ -33,12 +39,27 @@ function Get-NAVDevelopmentClient
         return $Clients
     }
 
-    $Client = 
-        $Clients | `
-        Where-Object -Property DatabaseServerType -EQ $DatabaseServerType | `
-        Where-Object -Property DatabaseServerName -EQ $DatabaseServerName | `
-        Where-Object -Property DatabaseName -EQ $DatabaseName | `
-        Select-Object -First 1
+    switch($Sql)
+    {
+        ($true) { $DatabaseServerType = 'Sql' }
+        ($false) { $DatabaseServerType = 'Native' }
+    }
+
+    $Clients = $Clients | Where-Object -Property DatabaseServerType -Eq $DatabaseServerType
+
+    if ($DatabaseServerName)
+    {
+        # Using the -Like operator, so that we can support wildcards in database server name
+        $Clients = $Clients | Where-Object -Property DatabaseServerName -Like $DatabaseServerName
+    }
+
+    if ($DatabaseName)
+    {
+        # Using the -Like operator, so that we can support wildcards in database name
+        $Clients = $Clients | Where-Object -Property DatabaseName -Like $DatabaseName
+    }
+
+    $Client = $Clients | Select-Object -First 1
 
     if (-not $Client)
     {

@@ -1,55 +1,32 @@
-﻿function Test-DynamicParams
+﻿# Couldn't get this to work with a DatabaseServerType with ValidateSet attribute. 
+# DatabaseServerType should be mutually exclusive with List, and when 
+# DatabaseServerType is SQL, both DatabaseServerName and DatabaseName are mandatory.
+# If DatabaseServerType is Native, either DatabaseServerName *or* DatabaseName
+# can be provided, but somehow my dynamic parameters did not show up. 
+
+function Test-DynamicParams
 {
     [CmdletBinding()]
     Param
     (
-        [Parameter(Mandatory)]
-        [ValidateSet('Native','Sql')]
-        [string]$DatabaseServerType = 'Sql'
+        [Parameter(Mandatory,ParameterSetName='Sql')]
+        [Switch]$Sql,
+
+        [Parameter(Mandatory,ParameterSetName='NativeServer')]
+        [Parameter(Mandatory,ParameterSetName='NativeStandAlone')]
+        [Switch]$Native,
+
+        [Parameter(Mandatory,ParameterSetName='Sql')]
+        [Parameter(Mandatory,ParameterSetName='NativeServer')]
+        [string]$DatabaseServerName,
+
+        [Parameter(Mandatory,ParameterSetName='Sql')]
+        [Parameter(Mandatory,ParameterSetName='NativeStandAlone')]
+        [string]$DatabaseName,
+
+        [Parameter(Mandatory,ParameterSetName='List')]
+        [Switch]$List
     )
 
-    DynamicParam
-    {
-        $ParameterDictionary = New-Object -Type System.Management.Automation.RuntimeDefinedParameterDictionary
-
-        switch($PSBoundParameters.DatabaseServerType)
-        {
-            'Native'
-            {
-                $ParameterDictionary.Add('DatabaseServerName', (New-DynamicParameter -ParameterName DatabaseServerName -ParameterSetName NativeServer))            
-                $ParameterDictionary.Add('DatabaseName', (New-DynamicParameter -ParameterName DatabaseName -ParameterSetName NativeStandAlone))                            
-            }
-            
-            'SQL'
-            {
-                $ParameterDictionary.Add('DatabaseServerName', (New-DynamicParameter -ParameterName DatabaseServerName -ParameterSetName SQL))            
-                $ParameterDictionary.Add('DatabaseName', (New-DynamicParameter -ParameterName DatabaseName -ParameterSetName SQL))            
-            }
-        }
-
-        return $ParameterDictionary 
-    }
-
-    Process
-    {
-        $PSBoundParameters
-    }
-}
-
-function New-DynamicParameter
-{
-    Param
-    (
-        [string]$ParameterName,
-        [string]$ParameterSetName
-    )
-
-    $ParameterAttribute = New-Object System.Management.Automation.ParameterAttribute
-    $ParameterAttribute.Mandatory = $True
-    $ParameterAttribute.ParameterSetName = $ParameterSetName
-
-    $AttributeCollection = New-Object -Type System.Collections.ObjectModel.Collection[System.Attribute]
-    $AttributeCollection.Add($ParameterAttribute)
-
-    New-Object -Type System.Management.Automation.RuntimeDefinedParameter($ParameterName, [string], $AttributeCollection)
+    $PSBoundParameters
 }

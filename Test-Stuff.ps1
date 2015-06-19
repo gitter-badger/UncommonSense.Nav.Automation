@@ -12,11 +12,15 @@
     }
 }
 
+Write-Host Via pipeline, from list:
 Get-NAVDevelopmentClient -List | Select-Object -First 1 | Test-Stuff
-Write-Host Foo
+
+Write-Host As parameter:
 Test-Stuff -Client (Get-NavDevelopmentClient -List | Select-Object -First 1 | Select-Object -ExpandProperty Client) 
-Write-Host Baz
+
+Write-Host Assigned to a variable:
 $Client = Get-NavDevelopmentClient -List | Select-Object -First 1 | Select-Object -ExpandProperty Client
 Test-Stuff -Client $Client
-Write-Host MyDatabase
-Get-NAVDevelopmentClient -DatabaseServerType SQL -DatabaseServerName 'JANHOEK1FC5\NAVDEMO' -DatabaseName 'Demo Database NAV (8-0)' | Test-Stuff
+
+Write-Host Via pipeline, with settings:
+Get-NAVDevelopmentClient -DatabaseServerType SQL -DatabaseServerName 'MACMINI-I\NAVDEMO' -DatabaseName 'Demo Database NAV (8-0)' | Test-Stuff

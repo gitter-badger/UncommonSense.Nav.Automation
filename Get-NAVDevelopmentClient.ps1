@@ -31,6 +31,10 @@ function Get-NAVDevelopmentClient
         [Parameter(ParameterSetName='Config')]
         [Switch]$Force,
 
+        [Parameter(ParameterSetName='Config')]
+        [ValidateSet('Hidden', 'Maximized', 'Minimized', 'Normal')]
+        [string]$WindowStyle = 'Normal',
+
         # Return all running development clients, instead of only the first match
         [Switch]$List
     )
@@ -57,8 +61,18 @@ function Get-NAVDevelopmentClient
 
     if ((-not $FilteredClients) -and ($ConfigName) -and ($Force))
     {
-        # FIXME: Build $ArgumentList
-        Start-Process -FilePath $Config.DevEnvPath -ArgumentList $ArgumentList
+        $Arguments = @()
+        $Arguments += ('servername={0}' -f $DatabaseServerName)
+        $Arguments += ('database={0}' -f $DatabaseName)
+        if ($ID) { $Arguments.Add('id={0}' -f $ID)  }
+
+        Start-Process -FilePath $Config.DevEnvPath -ArgumentList ($Arguments -join ',')
+
+        if ($WindowStyle -ne 'Normal')
+        {
+            Start-Sleep -Seconds 1
+            Set-WindowStyle -MainWindowHandle $Process.MainWindowHandle -WindowStyle $WindowStyle
+        }
     }
 
     $FilteredClients = Get-FilteredClients -DatabaseServerType $DatabaseServerType -DatabaseServerName $DatabaseServerName -DatabaseName $DatabaseName
@@ -69,6 +83,7 @@ function Get-NAVDevelopmentClient
         return $FilteredClients
     }
 
+    # Normal mode; return first match
     if ($FilteredClients)
     {
         return $FilteredClients | Select-Object -First 1

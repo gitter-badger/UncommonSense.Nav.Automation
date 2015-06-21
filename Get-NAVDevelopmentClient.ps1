@@ -44,8 +44,9 @@ function Get-NAVDevelopmentClient
     # Find config
     if ($ConfigName)
     {
-        $Header = 'Name,DevEnvPath,DatabaseServerType,DatabaseServerName,DatabaseName,ZupID'
-        $Config = Import-Csv -Path $ConfigListFileName -Header | Where-Object Name -eq $ConfigName
+        $Header = 'Name','DevEnvPath','DatabaseServerType','DatabaseServerName','DatabaseName','ZupID'
+        $Configs = Import-Csv -Path $ConfigListFileName -Header $Header
+        $Config = $Configs | Where-Object Name -eq $ConfigName
         
         if (-not $Config) 
         {
@@ -66,7 +67,7 @@ function Get-NAVDevelopmentClient
         $Arguments += ('database={0}' -f $DatabaseName)
         if ($ID) { $Arguments.Add('id={0}' -f $ID)  }
 
-        Start-Process -FilePath $Config.DevEnvPath -ArgumentList ($Arguments -join ',')
+        $Process = Start-Process -FilePath $Config.DevEnvPath -ArgumentList ($Arguments -join ',') -PassThru
 
         if ($WindowStyle -ne 'Normal')
         {

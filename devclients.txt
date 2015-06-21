@@ -1,2 +1,1 @@
-2009R2NATIVE,C:\Program Files (x86)\Microsoft Dynamics NAV\60\Classic\fin.exe,,c:\users\jhoek\desktop\demo.fdb,2009r2native
-2015SQL,C:\Program Files (x86)\Microsoft Dynamics NAV\80\RoleTailored Client\finsql.exe,JANHOEK1FC5\NAVDEMO,Demo Database NAV (8-0),2015
+2015SQL,C:\Program Files (x86)\Microsoft Dynamics NAV\80\RoleTailored Client\finsql.exe,SQL,MACMINI-I\NAVDEMO,Demo Database NAV (8-0),2015

@@ -58,12 +58,13 @@ function Get-NAVApplicationObjectInfo
         Write-Progress -Activity $Activity -CurrentOperation 'Outputting records' -PercentComplete (($CurrentRecord / $NoOfRecords) * 100)
         $CustomObject = New-Object System.Object
         $CustomObject | Add-Member -Type NoteProperty -Name Type -Value $TypeNames[$ObjectRecord.FieldValues.Item($TypeFieldNo).Value]
-        $CustomObject | Add-Member -Type NoteProperty -Name ID -Value $ObjectRecord.FieldValues.Item($IDFieldNo).Value
+        $CustomObject | Add-Member -Type NoteProperty -Name ID -Value ([int]$ObjectRecord.FieldValues.Item($IDFieldNo).Value)
         $CustomObject | Add-Member -Type NoteProperty -Name Name -Value $ObjectRecord.FieldValues.Item($NameFieldNo).Value
         $CustomObject | Add-Member -Type NoteProperty -Name Modified -Value ($ObjectRecord.FieldValues.Item($ModifiedFieldNo).Value -eq '1')
         $CustomObject | Add-Member -Type NoteProperty -Name Compiled -Value ($ObjectRecord.FieldValues.Item($CompiledFieldNo).Value -eq '1')
         $CustomObject | Add-Member -Type NoteProperty -Name DateTime -Value ([DateTime]"$($ObjectRecord.FieldValues.Item($DateFieldNo).Value) $($ObjectRecord.FieldValues.Item($TimeFieldNo).Value)")
         $CustomObject | Add-Member -Type NoteProperty -Name VersionList -Value $ObjectRecord.FieldValues.Item($VersionListFieldNo).Value
+        $CustomObject.PSObject.TypeNames.Insert(0, 'UncommonSense.NAV.Automation.ObjectInfo')
 
         $CustomObject
         $CurrentRecord++

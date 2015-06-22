@@ -1,1 +1,2 @@
 2015SQL,C:\Program Files (x86)\Microsoft Dynamics NAV\80\RoleTailored Client\finsql.exe,SQL,MACMINI-I\NAVDEMO,Demo Database NAV (8-0),2015
+CRONUS80,C:\Program Files (x86)\Microsoft Dynamics NAV\80\RoleTailored Client\finsql.exe,SQL,JPC-LAPTOP-16\NAVDEMO,Demo Database NAV (8-0),CRONUS80

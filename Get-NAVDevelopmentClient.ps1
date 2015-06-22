@@ -54,21 +54,21 @@ function Get-NAVDevelopmentClient
 
         return $ParameterDictionary 
     }
-    End
+    Process
     {
         Add-Type -Path (Join-Path $PSScriptRoot Org.Edgerunner.Dynamics.Nav.CSide.dll)
 
         # Find config
-        if ($ConfigName)
+        if ($PSCmdlet.MyInvocation.BoundParameters.ConfigName)
         {
             $ConfigListFileName = Join-Path $PSScriptRoot 'devclients.txt'
             $Header = 'Name','DevEnvPath','DatabaseServerType','DatabaseServerName','DatabaseName','ZupID'
             $Configs = Import-Csv -Path $ConfigListFileName -Header $Header
-            $Config = $Configs | Where-Object Name -eq $ConfigName
+            $Config = $Configs | Where-Object Name -eq $PSCmdlet.MyInvocation.BoundParameters.ConfigName
         
             if (-not $Config) 
             {
-                throw "Configuration '$ConfigName' could not be found in $ConfigListFileName."
+                throw "Configuration '$($PSCmdlet.MyInvocation.BoundParameters.ConfigName)' could not be found in $ConfigListFileName."
             }
 
             $DatabaseServerType = $Config.DatabaseServerType
@@ -78,7 +78,7 @@ function Get-NAVDevelopmentClient
 
         $FilteredClients = Get-FilteredClients -DatabaseServerType $DatabaseServerType -DatabaseServerName $DatabaseServerName -DatabaseName $DatabaseName
 
-        if ((-not $FilteredClients) -and ($ConfigName) -and ($Force))
+        if ((-not $FilteredClients) -and ($PSCmdlet.MyInvocation.BoundParameters.ConfigName) -and ($Force))
         {
             $Arguments = @()
             $Arguments += ('servername={0}' -f $DatabaseServerName)

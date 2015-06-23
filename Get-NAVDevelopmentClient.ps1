@@ -32,7 +32,7 @@ function Get-NAVDevelopmentClient
 
         # Specifies which user setup (zup) file to use
         [Parameter(ParameterSetName='Config')]
-        [string]$ZupID,
+        [string]$ZupPath,
 
         # Return all running development clients, instead of only the first match
         [Parameter(ParameterSetName='Filters')]
@@ -46,7 +46,7 @@ function Get-NAVDevelopmentClient
         $ParameterAttribute.ParameterSetName = 'Config'
 
         $ConfigListFileName = Join-Path $PSScriptRoot 'devclients.txt'
-        $Header = 'Name','DevEnvPath','DatabaseServerType','DatabaseServerName','DatabaseName','ZupID'
+        $Header = 'Name','DevEnvPath','DatabaseServerType','DatabaseServerName','DatabaseName','ZupPath'
         $Configs = Import-Csv -Path $ConfigListFileName -Header $Header | ForEach-Object { $_.Name }
         $ValidateSetAttribute = New-Object System.Management.Automation.ValidateSetAttribute($Configs)
 
@@ -68,7 +68,7 @@ function Get-NAVDevelopmentClient
         if ($PSCmdlet.MyInvocation.BoundParameters.ConfigName)
         {
             $ConfigListFileName = Join-Path $PSScriptRoot 'devclients.txt'
-            $Header = 'Name','DevEnvPath','DatabaseServerType','DatabaseServerName','DatabaseName','ZupID'
+            $Header = 'Name','DevEnvPath','DatabaseServerType','DatabaseServerName','DatabaseName','ZupPath'
             $Configs = Import-Csv -Path $ConfigListFileName -Header $Header
             $Config = $Configs | Where-Object Name -eq $PSCmdlet.MyInvocation.BoundParameters.ConfigName
         
@@ -90,9 +90,9 @@ function Get-NAVDevelopmentClient
             $Arguments += ('servername={0}' -f $DatabaseServerName)
             $Arguments += ('database={0}' -f $DatabaseName)
 
-            if ($ZupID) 
+            if ($ZupPath) 
             { 
-                $Arguments += ('id={0}' -f $ZupID)  
+                $Arguments += ('id={0}' -f $ZupPath)  
             }
 
             $Process = Start-Process -FilePath $Config.DevEnvPath -ArgumentList ($Arguments -join ',') -PassThru

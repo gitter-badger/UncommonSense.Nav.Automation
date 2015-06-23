@@ -28,6 +28,9 @@ function Get-NAVDevelopmentClient
         [ValidateSet('Hidden', 'Maximized', 'Minimized', 'Normal')]
         [string]$WindowStyle = 'Normal',
 
+        [Parameter(ParameterSetName='Config')]
+        [string]$ZupID,
+
         # Return all running development clients, instead of only the first match
         [Parameter(ParameterSetName='Filters')]
         [Switch]$List
@@ -83,13 +86,17 @@ function Get-NAVDevelopmentClient
             $Arguments = @()
             $Arguments += ('servername={0}' -f $DatabaseServerName)
             $Arguments += ('database={0}' -f $DatabaseName)
-            if ($ID) { $Arguments.Add('id={0}' -f $ID)  }
+
+            if ($ZupID) 
+            { 
+                $Arguments += ('id={0}' -f $ZupID)  
+            }
 
             $Process = Start-Process -FilePath $Config.DevEnvPath -ArgumentList ($Arguments -join ',') -PassThru
+            Start-Sleep -Seconds 1
 
             if ($WindowStyle -ne 'Normal')
             {
-                Start-Sleep -Seconds 1
                 Set-WindowStyle -MainWindowHandle $Process.MainWindowHandle -WindowStyle $WindowStyle
             }
         }

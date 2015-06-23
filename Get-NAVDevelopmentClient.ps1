@@ -21,13 +21,16 @@ function Get-NAVDevelopmentClient
         [Parameter(ParameterSetName='Filters')]
         [string]$DatabaseName,
 
+        # Opens the specified configuration if it is not running yet
         [Parameter(ParameterSetName='Config')]
         [Switch]$Force,
 
+        # Controls how the development client window is displayed
         [Parameter(ParameterSetName='Config')]
         [ValidateSet('Hidden', 'Maximized', 'Minimized', 'Normal')]
         [string]$WindowStyle = 'Normal',
 
+        # Specifies which user setup (zup) file to use
         [Parameter(ParameterSetName='Config')]
         [string]$ZupID,
 

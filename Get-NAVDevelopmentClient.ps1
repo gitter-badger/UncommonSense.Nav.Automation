@@ -30,10 +30,6 @@ function Get-NAVDevelopmentClient
         [ValidateSet('Hidden', 'Maximized', 'Minimized', 'Normal')]
         [string]$WindowStyle = 'Normal',
 
-        # Specifies which user setup (zup) file to use
-        [Parameter(ParameterSetName='Config')]
-        [string]$ZupPath,
-
         # Return all running development clients, instead of only the first match
         [Parameter(ParameterSetName='Filters')]
         [Switch]$List
@@ -80,6 +76,7 @@ function Get-NAVDevelopmentClient
             $DatabaseServerType = $Config.DatabaseServerType
             $DatabaseServerName = $Config.DatabaseServerName 
             $DatabaseName = $Config.DatabaseName
+            $ZupPath = $Config.ZupPath
         }
 
         $FilteredClients = Get-FilteredClients -DatabaseServerType $DatabaseServerType -DatabaseServerName $DatabaseServerName -DatabaseName $DatabaseName

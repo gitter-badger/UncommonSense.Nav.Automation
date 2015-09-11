@@ -5,11 +5,12 @@ or a list of all running Microsoft Dynamics NAV development clients.
 #>
 function Get-NAVDevelopmentClient
 {
-    [CmdletBinding(DefaultParameterSetName='Config')]
+    [CmdletBinding()]
     Param
     (
         # Filters running clients by server type
         [Parameter(ParameterSetName='Filters')]
+        [Parameter(Mandatory,ParameterSetName='Settings')]
         [ValidateSet('Native','Sql')]
         [string]$DatabaseServerType,
 
@@ -21,86 +22,52 @@ function Get-NAVDevelopmentClient
         [Parameter(ParameterSetName='Filters')]
         [string]$DatabaseName,
 
-        # Opens the specified configuration if it is not running yet
-        [Parameter(ParameterSetName='Config')]
-        [Switch]$Force,
-
-        # Controls how the development client window is displayed
-        [Parameter(ParameterSetName='Config')]
-        [ValidateSet('Hidden', 'Maximized', 'Minimized', 'Normal')]
-        [string]$WindowStyle = 'Normal',
-
         # Return all running development clients, instead of only the first match
         [Parameter(ParameterSetName='Filters')]
-        [Switch]$List
+        [Switch]$List,
+
+        # Opens the specified configuration if it is not running yet
+        [Parameter(ParameterSetName='Settings')]
+        [Switch]$Force,
+
+        [Parameter(ParameterSetName='Settings')]
+        [ValidateScript( { Test-Path $_ } )]
+        [string]$DevClientPath,
+
+        [Parameter(ParameterSetName='Settings')]
+        [string]$LiteralDatabaseServerName,
+
+        [Parameter(ParameterSetName='Settings')]
+        [string]$LiteralDatabaseName,
+
+        # Controls how the development client window is displayed
+        [Parameter(ParameterSetName='Settings')]
+        [ValidateSet('Hidden', 'Maximized', 'Minimized', 'Normal')]
+        [string]$WindowStyle = 'Normal'
     )
 
-    DynamicParam
-    {
-        $ParameterAttribute = New-Object System.Management.Automation.ParameterAttribute
-        $ParameterAttribute.Mandatory = $True
-        $ParameterAttribute.ParameterSetName = 'Config'
-
-        $ConfigListFileName = Join-Path $PSScriptRoot 'devclients.txt'
-        $Header = 'Name','DevEnvPath','DatabaseServerType','DatabaseServerName','DatabaseName','ZupPath'
-        $Configs = Import-Csv -Path $ConfigListFileName -Header $Header | ForEach-Object { $_.Name }
-        $ValidateSetAttribute = New-Object System.Management.Automation.ValidateSetAttribute($Configs)
-
-        $AttributeCollection = New-Object -Type System.Collections.ObjectModel.Collection[System.Attribute]
-        $AttributeCollection.Add($ParameterAttribute)
-        $AttributeCollection.Add($ValidateSetAttribute)
-
-        $DynamicParameter = New-Object -Type System.Management.Automation.RuntimeDefinedParameter('ConfigName', [string], $AttributeCollection)
-        $ParameterDictionary = New-Object -Type System.Management.Automation.RuntimeDefinedParameterDictionary
-        $ParameterDictionary.Add('ConfigName', $DynamicParameter)
-
-        return $ParameterDictionary 
-    }
     Process
     {
-        Add-Type -Path (Join-Path $PSScriptRoot Org.Edgerunner.Dynamics.Nav.CSide.dll)
-
-        # Find config
-        if ($PSCmdlet.MyInvocation.BoundParameters.ConfigName)
-        {
-            $ConfigListFileName = Join-Path $PSScriptRoot 'devclients.txt'
-            $Header = 'Name','DevEnvPath','DatabaseServerType','DatabaseServerName','DatabaseName','ZupPath'
-            $Configs = Import-Csv -Path $ConfigListFileName -Header $Header
-            $Config = $Configs | Where-Object Name -eq $PSCmdlet.MyInvocation.BoundParameters.ConfigName
-        
-            if (-not $Config) 
-            {
-                throw "Configuration '$($PSCmdlet.MyInvocation.BoundParameters.ConfigName)' could not be found in $ConfigListFileName."
-            }
-
-            $DatabaseServerType = $Config.DatabaseServerType
-            $DatabaseServerName = $Config.DatabaseServerName 
-            $DatabaseName = $Config.DatabaseName
-            $ZupPath = $Config.ZupPath
-        }
-
         $FilteredClients = Get-FilteredClients -DatabaseServerType $DatabaseServerType -DatabaseServerName $DatabaseServerName -DatabaseName $DatabaseName
 
-        if ((-not $FilteredClients) -and ($PSCmdlet.MyInvocation.BoundParameters.ConfigName) -and ($Force))
+        if (-not $FilteredClients) 
         {
-            $Arguments = @()
-            $Arguments += ('servername={0}' -f $DatabaseServerName)
-            $Arguments += ('database={0}' -f $DatabaseName)
-
-            if ($ZupPath) 
-            { 
-                $Arguments += ('id={0}' -f $ZupPath)  
-            }
-
-            $Process = Start-Process -FilePath $Config.DevEnvPath -ArgumentList ($Arguments -join ',') -PassThru
-            Start-Sleep -Seconds 1
-
-            if ($WindowStyle -ne 'Normal')
+            if ($Force)
             {
-                Set-WindowStyle -MainWindowHandle $Process.MainWindowHandle -WindowStyle $WindowStyle
+                if (-not $LiteralDatabaseServerName)
+                {
+                    $LiteralDatabaseServerName = $DatabaseServerName
+                }
+
+                if (-not $LiteralDatabaseName)
+                {
+                    $LiteralDatabaseName = $DatabaseName
+                }
+
+                Start-NavDevelopmentClient -DevClientPath $DevClientPath -DatabaseServerType $DatabaseServerType -DatabaseServerName $LiteralDatabaseServerName -DatabaseName $LiteralDatabaseName -WindowStyle $WindowStyle
             }
         }
-
+        
         $FilteredClients = Get-FilteredClients -DatabaseServerType $DatabaseServerType -DatabaseServerName $DatabaseServerName -DatabaseName $DatabaseName
 
         # List mode

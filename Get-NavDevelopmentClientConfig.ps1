@@ -1,4 +1,4 @@
-﻿function Get-NavDevelopmentClient
+﻿function Get-NavDevelopmentClientConfig
 {
     [CmdletBinding()]
     Param
@@ -22,7 +22,7 @@
     
     if (-not (Test-Path -Path $ConfigsFileName))
     {
-        'Name,Path' | Out-File -FilePath $ConfigsFileName 
+        'Name,DevClientPath' | Out-File -FilePath $ConfigsFileName 
     }
     else
     {

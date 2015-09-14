@@ -17,7 +17,9 @@
 
         # Controls how the development client window is displayed
         [ValidateSet('Hidden', 'Maximized', 'Minimized', 'Normal')]
-        [string]$WindowStyle = 'Normal'
+        [string]$WindowStyle = 'Normal',
+
+        [Switch]$PassThru
     )
 
     $Arguments = @()
@@ -45,4 +47,6 @@
     $Process = [System.Diagnostics.Process]::Start($ProcessStartInfo)
 
     Start-Sleep -Seconds 1
+
+    # FIXME: return client
 }

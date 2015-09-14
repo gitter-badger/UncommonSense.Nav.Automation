@@ -3,10 +3,6 @@
     [CmdletBinding()]
     Param
     (
-        [Parameter(Mandatory)]
-        [ValidateSet('Native','Sql')]
-        [string]$Type,
-
         [Parameter(Mandatory,ParameterSetName='List')]
         [Switch]$List,
 
@@ -14,12 +10,8 @@
         [string]$Name
     )
 
-    switch($Type)
-    {
-        'Native' { $ConfigsFileName = Join-Path $PSScriptRoot "fin.txt" } 
-        'Sql'    { $ConfigsFileName = Join-Path $PSScriptRoot "finsql.txt" }
-    }
-    
+    $ConfigsFileName = Join-Path $PSScriptRoot 'devclients.txt'
+
     if (-not (Test-Path -Path $ConfigsFileName))
     {
         'Name,DevClientPath' | Out-File -FilePath $ConfigsFileName 

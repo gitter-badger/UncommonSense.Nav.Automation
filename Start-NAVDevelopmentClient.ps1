@@ -1,18 +1,21 @@
 ﻿function Start-NAVDevelopmentClient
 {
     [CmdletBinding()]
+    [OutputType([Org.Edgerunner.Dynamics.Nav.CSide.Client])]
     Param
     (
-        [Parameter(Mandatory,ValueFromPipeLine,ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory,ValueFromPipelineByPropertyName)]
         [ValidateScript( { Test-Path $_ } )]
         [string]$DevClientPath,
 
-        [Parameter(Mandatory)]
-        [ValidateSet('Native','Sql')]
+        [Parameter(Mandatory,ValueFromPipeLineByPropertyName)]
+        [ValidateSet('Native','SqlServer')]
         [string]$DatabaseServerType,
 
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string]$DatabaseServerName,
 
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string]$DatabaseName,
 
         # Controls how the development client window is displayed
@@ -24,17 +27,17 @@
 
     $Arguments = @()
 
-    if ($DatabaseServerName)
+    if (-not ([string]::IsNullOrEmpty($DatabaseServerName)))
     {
         $Arguments += ('servername={0}' -f $DatabaseServerName)
     }
 
-    if ($DatabaseName)
+    if (-not ([string]::IsNullOrEmpty($DatabaseName)))
     {
         $Arguments += ('database={0}' -f $DatabaseName)
     }
 
-    if ($ZupPath) 
+    if (-not ([string]::IsNullOrEmpty($ZupPath)))
     { 
         $Arguments += ('id={0}' -f $ZupPath)  
     }
@@ -46,7 +49,12 @@
 
     $Process = [System.Diagnostics.Process]::Start($ProcessStartInfo)
 
-    Start-Sleep -Seconds 1
+    Start-Sleep -Seconds 3
 
-    # FIXME: return client
+    $Client = Get-NAVDevelopmentClient -List | Where-Object -Property WindowHandle -Eq -Value $Process.MainWindowHandle | Select-Object -First 1
+
+    if ($PassThru)
+    {
+        $Client
+    }
 }

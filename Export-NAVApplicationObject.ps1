@@ -5,6 +5,7 @@
 function Export-NAVApplicationObject
 {
     [CmdletBinding()]
+    [OutputType([System.IO.FileInfo])]
     Param
     (
         [Parameter(Mandatory,ValueFromPipeLine,ValueFromPipeLineByPropertyName)]
@@ -51,8 +52,5 @@ function Export-NAVApplicationObject
 
         [System.IO.File]::WriteAllBytes($FilePath, $Bytes)
         Get-ChildItem -Path $FilePath
-    }
-    End
-    {
     }
 }

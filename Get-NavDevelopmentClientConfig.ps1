@@ -1,4 +1,4 @@
-﻿function Get-NavDevelopmentClientConfig
+﻿function Get-NAVDevelopmentClientConfig
 {
     [CmdletBinding()]
     Param

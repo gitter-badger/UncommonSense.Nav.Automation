@@ -9,7 +9,7 @@
         [string]$DevClientPath,
 
         [Parameter(Mandatory,ValueFromPipeLineByPropertyName)]
-        [ValidateSet('Native','SqlServer')]
+        [ValidateSet('Native','Sql')]
         [string]$DatabaseServerType,
 
         [Parameter(ValueFromPipelineByPropertyName)]

@@ -22,6 +22,9 @@ function Start-NAVDevelopmentClient
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]$DatabaseName,
 
+        [Parameter(ValueFromPipelineByPropertyName)]
+        [string]$ZupPath,
+
         # Controls how the development client window is displayed
         [ValidateSet('Hidden', 'Maximized', 'Minimized', 'Normal')]
         [string]$WindowStyle = 'Normal',

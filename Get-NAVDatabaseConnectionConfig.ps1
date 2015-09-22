@@ -3,10 +3,7 @@
     [CmdletBinding()]
     Param
     (
-        [Parameter(Mandatory,ParameterSetName='List')]
-        [Switch]$List,
-
-        [Parameter(Mandatory,ParameterSetName='Name',Position=0)]
+        [Parameter(Position=0)]
         [string]$Name
     )
 

@@ -9,26 +9,26 @@ function Get-NAVDevelopmentClient
     Param
     (
         # Filters running clients by server type
-        [Parameter(ParameterSetName='Filters')]
+        [Parameter(ValueFromPipeLineByPropertyName)]
         [ValidateSet('Native','Sql')]
-        [string]$DatabaseServerType,
+        [Alias('DatabaseServerType')]
+        [string]$DatabaseServerTypeFilter,
 
         # Filters running clients by server name
-        [Parameter(ParameterSetName='Filters')]
-        [string]$DatabaseServerName,
+        [Alias('DatabaseServerName')]
+        [string]$DatabaseServerNameFilter,
 
         # Filters running clients by database name
-        [Parameter(ParameterSetName='Filters')]
-        [string]$DatabaseName,
+        [Alias('DatabaseName')]
+        [string]$DatabaseNameFilter,
 
         # Return all running development clients, instead of only the first match
-        [Parameter(ParameterSetName='Filters')]
-        [Switch]$List,
-
+        [Switch]$List
     )
 
     Process
     {
+        $FilteredClients = Get-FilteredClients -DatabaseServerType $DatabaseServerType -DatabaseServerName $DatabaseServerNameFilter -DatabaseName $DatabaseNameFilter
 
         # List mode
         if ($List)

@@ -68,6 +68,7 @@ function Get-NAVDevelopmentClientInfo
         Company = $Client.Company
         CSideVersion = $Client.CSideVersion
         ApplicationVersion = $Client.ApplicationVersion
+        WindowHandle = $Client.WindowHandle
         Client = $Client
     }
 }

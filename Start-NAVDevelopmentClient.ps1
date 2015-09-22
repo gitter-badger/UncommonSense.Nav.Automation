@@ -1,4 +1,8 @@
-﻿function Start-NAVDevelopmentClient
+﻿<#
+.Synopsis
+Starts a NAV development client.
+#>
+function Start-NAVDevelopmentClient
 {
     [CmdletBinding()]
     [OutputType([Org.Edgerunner.Dynamics.Nav.CSide.Client])]

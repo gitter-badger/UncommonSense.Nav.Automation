@@ -1,4 +1,8 @@
-﻿function Stop-NAVDevelopmentClient
+﻿<#
+.Synopsis
+Stops a running NAV development client.
+#>
+function Stop-NAVDevelopmentClient
 {
     [CmdletBinding()]
     Param

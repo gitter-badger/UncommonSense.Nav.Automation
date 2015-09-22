@@ -1,4 +1,8 @@
-﻿function Get-NAVDatabaseConnectionConfig
+﻿<#
+.Synopsis
+Retrieves a (list of) predefined NAV database configuration(s).
+#>
+function Get-NAVDatabaseConnectionConfig
 {
     [CmdletBinding()]
     Param

@@ -1,4 +1,8 @@
-﻿function Get-NAVDevelopmentClientConfig
+﻿<#
+.Synopsis
+Retrieves a (list of) predefined NAV development client configuration(s).
+#>
+function Get-NAVDevelopmentClientConfig
 {
     [CmdletBinding()]
     Param

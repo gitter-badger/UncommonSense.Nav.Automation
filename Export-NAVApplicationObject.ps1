@@ -25,6 +25,10 @@ function Export-NAVApplicationObject
         [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
         [int]$ID,
 
+        # Specifies DateTime of the object to export
+        [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [DateTime]$DateTime,
+
         [Switch]$Force
     )
 
@@ -51,6 +55,10 @@ function Export-NAVApplicationObject
         $FilePath = Join-Path $Path $FileName
 
         [System.IO.File]::WriteAllBytes($FilePath, $Bytes)
-        Get-ChildItem -Path $FilePath
+
+        $file = Get-ChildItem -Path $FilePath
+        $file.LastWriteTime = [DateTime]$DateTime
+
+        Get-ChildItem -Path $FilePath        
     }
 }

@@ -23,7 +23,7 @@ function Export-NAVApplicationObject
 
         # Specifies the ID of the object to export
         [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
-        [int]$ID,        
+        [int]$ID,
 
         [Switch]$Force
     )

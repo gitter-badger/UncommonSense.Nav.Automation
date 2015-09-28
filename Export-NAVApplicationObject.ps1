@@ -23,11 +23,7 @@ function Export-NAVApplicationObject
 
         # Specifies the ID of the object to export
         [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
-        [int]$ID,
-
-        # Specifies DateTime of the object to export
-        [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
-        [DateTime]$DateTime,
+        [int]$ID,        
 
         [Switch]$Force
     )
@@ -56,9 +52,23 @@ function Export-NAVApplicationObject
 
         [System.IO.File]::WriteAllBytes($FilePath, $Bytes)
 
-        $file = Get-ChildItem -Path $FilePath
-        $file.LastWriteTime = [DateTime]$DateTime
+        $Object = $Client | Get-NAVApplicationObjectInfo -TypeFilter $Type -IDFilter $ID
 
-        Get-ChildItem -Path $FilePath        
+        if ($Object)
+        {
+            $file = Get-ChildItem -Path $FilePath
+            $file.LastWriteTime = [DateTime]$Object.DateTime
+
+            if ($Object.Modified)
+            {
+                $file.Attributes = [System.IO.FileAttributes]::Archive
+            }
+            else
+            {
+                $file.Attributes = [System.IO.FileAttributes]::Normal
+            }
+       }
+              
+       Get-ChildItem -Path $FilePath
     }
 }

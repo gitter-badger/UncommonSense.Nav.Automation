@@ -29,10 +29,11 @@ function Start-NAVDevelopmentClient
         [string]$NTAuthentication,
 
         [Parameter(ValueFromPipelineByPropertyName)]
+        [ValidateSet('tcp','tcps','netb')]
         [string]$NetType,
 
         # Controls how the development client window is displayed
-        [ValidateSet('Hidden', 'Maximized', 'Minimized', 'Normal')]
+        [ValidateSet('Hidden','Maximized','Minimized','Normal')]
         [string]$WindowStyle = 'Normal',
 
         [Switch]$PassThru

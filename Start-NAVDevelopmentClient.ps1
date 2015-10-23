@@ -25,8 +25,15 @@ function Start-NAVDevelopmentClient
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]$ZupPath,
 
+        [Parameter(ValueFromPipelineByPropertyName)]
+        [string]$NTAuthentication,
+
+        [Parameter(ValueFromPipelineByPropertyName)]
+        [ValidateSet('tcp','tcps','netb')]
+        [string]$NetType,
+
         # Controls how the development client window is displayed
-        [ValidateSet('Hidden', 'Maximized', 'Minimized', 'Normal')]
+        [ValidateSet('Hidden','Maximized','Minimized','Normal')]
         [string]$WindowStyle = 'Normal',
 
         [Switch]$PassThru
@@ -47,6 +54,16 @@ function Start-NAVDevelopmentClient
     if (-not ([string]::IsNullOrEmpty($ZupPath)))
     { 
         $Arguments += ('id={0}' -f $ZupPath)  
+    }
+
+    if (-not ([string]::IsNullOrEmpty($NTAuthentication)))
+    { 
+        $Arguments += ('ntauthentication={0}' -f $NTAuthentication)  
+    }
+
+    if (-not ([string]::IsNullOrEmpty($NetType)))
+    { 
+        $Arguments += ('nettype={0}' -f $NetType)  
     }
 
     $ProcessStartInfo = New-Object -TypeName System.Diagnostics.ProcessStartInfo

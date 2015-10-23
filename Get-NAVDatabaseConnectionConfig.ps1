@@ -15,7 +15,7 @@ function Get-NAVDatabaseConnectionConfig
 
     if (-not (Test-Path -Path $DatabaseConfigsFileName))
     {
-        'Name,DatabaseServerType,DatabaseServerName,DatabaseName,DevClientName,ZupPath' | Out-File -FilePath $DatabaseConfigsFileName
+        'Name,DatabaseServerType,DatabaseServerName,DatabaseName,DevClientName,ZupPath,NTAuthentication,NetType' | Out-File -FilePath $DatabaseConfigsFileName
     }
     else
     {
